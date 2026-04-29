@@ -1,4 +1,4 @@
-const base_Url = "https://hubauthbackend-production.up.railway.app/";
+const base_Url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/";
 const api_key = import.meta.env.VITE_API_KEY;
 
 function isTokenExpired(token: string): boolean {
