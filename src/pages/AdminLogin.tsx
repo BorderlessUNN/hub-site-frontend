@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/authContext";
 
-export default function Login() {
+export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [showpassword, setshowpassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -41,17 +41,17 @@ export default function Login() {
       <div className="flex flex-col mx-auto  w-full h-screen overflow-auto ">
         <img
           className=" w-[82px] h-[94px] mx-auto mt-[100px] lg:w-[125px] lg:h-[143.88px] lg:mt-[2px]"
-          src="avatar.jpg"
+          src="/avatar.jpg"
         ></img>
         <img
           className=" w-[142px] h-[31px] lg:w-[262.21px] lg:h-[57px] mx-auto"
-          src="logo.png"
+          src="/logo.png"
         ></img>
         <h1 className="font-bold mb-[36px] mt-[10px] lg:mt-[16px] text-center">
           {" "}
           Tech club unn
         </h1>
-        <p className="font-bold text-center"> ADMIN Log In</p>
+        <p className="font-bold text-center">Admin Login</p>
         <form onSubmit={logIn} className="mx-auto flex flex-col items-center">
           <input
             id="email"

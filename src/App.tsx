@@ -10,7 +10,11 @@ import Schedule from "./pages/dashboard/SchedulePage";
 import Register from "./pages/dashboard/RegisterPage";
 import Statistics from "./pages/dashboard/StatisticsPage";
 import { useAuth } from "./context/authContext";
-import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
+import NonMemberLogin from "./pages/NonMemberLogin";
+import LandingPage from "./pages/LandingPage";
+import MemberLogin from "./pages/MemberLogin";
+import BookTime from "./pages/BookTime";
 
 import Member from "./pages/Member";
 import NonMember from "./pages/NonMember";
@@ -47,20 +51,26 @@ export default function App() {
     <Router>
       <Routes>
         {/* Public routes (always available) */}
-        <Route path="/login" element={<Login />} />
-        {/* Redirect root ("/") depending on auth */}
+        <Route path="/" element={<LandingPage />} />
         <Route
-          path="/"
+          path="/login"
           element={
-            isLoggedIn ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <MemberLogin />
           }
         />
-        isDisabled
-        {isLoggedIn && (
+        <Route
+          path="/book-time"
+          element={
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <BookTime />
+          }
+        />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/nonMemberLogin"
+          element={
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <NonMemberLogin />
+          }
+        />
           <Route
             path="/dashboard"
             element={
@@ -113,7 +123,6 @@ export default function App() {
             />
             <Route path="*" element={<Navigate to="check-ins" replace />} />
           </Route>
-        )}
         {/* Fallback: if no route matches */}
         <Route
           path="*"
@@ -121,7 +130,7 @@ export default function App() {
             isLoggedIn ? (
               <Navigate to="/dashboard" replace />
             ) : (
-              <Navigate to="/login" replace />
+              <Navigate to="/" replace />
             )
           }
         />
