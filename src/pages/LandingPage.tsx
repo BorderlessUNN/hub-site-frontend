@@ -22,10 +22,10 @@ export default function LandingPage() {
           <div className="flex flex-col justify-center space-y-4 lg:space-y-5">
             <p className="text-xs uppercase tracking-[0.4em] text-[#94A3B8]">BTC UNN</p>
             <h1 className="text-lg leading-tight text-[#04252D] sm:text-xl">
-              <strong className="font-bold">BTC UNN</strong> a web3 student based community, designed to foster growth, train tech enthusiast and bringing them On-chain.
+              <strong className="font-bold">BTC UNN</strong> is a student-based Web3 community focused on fostering growth, training tech enthusiasts, and bringing them on-chain.
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-[#475569] sm:text-base">
-              This is the official Login page to users of the HUB, including both members and non - members.
+              This is the official landing page for the HUB, welcoming both members and non-members.
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 mt-6">
