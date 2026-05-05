@@ -6,6 +6,15 @@ import {
 } from "react-router-dom";
 import { useState } from "react";
 import CheckIns from "./pages/dashboard/CheckInsPage";
+
+const DashboardDefault = () => {
+  const memberPhone = localStorage.getItem("member_session_phone");
+  return memberPhone ? (
+    <Navigate to="profile" replace />
+  ) : (
+    <Navigate to="check-ins" replace />
+  );
+};
 import Schedule from "./pages/dashboard/SchedulePage";
 import Register from "./pages/dashboard/RegisterPage";
 import Statistics from "./pages/dashboard/StatisticsPage";
@@ -82,7 +91,7 @@ export default function App() {
             }
           >
             {/* Default page under /dashboard */}
-            <Route index element={<Navigate to="check-ins" replace />} />
+            <Route index element={<DashboardDefault />} />
 
             <Route
               path="check-ins"
@@ -103,9 +112,20 @@ export default function App() {
               }
             />
             <Route
-              path="isMember"
+              path="profile"
               element={<Member email={email} email_handler={email_handler} />}
             />
+            <Route
+              path="profile/update"
+              element={
+                <Member
+                  email={email}
+                  email_handler={email_handler}
+                  forceEditMode
+                />
+              }
+            />
+            <Route path="isMember" element={<Navigate to="profile" replace />} />
             <Route path="seats" element={<Seats />} />
             <Route
               path="enterDetails"

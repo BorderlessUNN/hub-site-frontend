@@ -29,7 +29,7 @@ export default function MemberLogin() {
     setTimeout(() => {
       setLoading(false);
       const hasStoredPassword = localStorage.getItem(`member_password_${normalized}`);
-      const firstTime = mockFirstTimePhones.includes(normalized) || !hasStoredPassword;
+      const firstTime = !hasStoredPassword;
 
       setFlow(firstTime ? "firstTime" : "returning");
       setMessage(
@@ -58,8 +58,9 @@ export default function MemberLogin() {
         return;
       }
       localStorage.setItem(`member_password_${currentPhone}`, password);
+      localStorage.setItem("member_session_phone", currentPhone);
       setMessage("Password created successfully. Redirecting...");
-      setTimeout(() => navigate("/dashboard/isMember"), 800);
+      setTimeout(() => navigate("/dashboard/profile/update"), 800);
       return;
     }
 
@@ -70,8 +71,9 @@ export default function MemberLogin() {
       }
       const storedPassword = localStorage.getItem(`member_password_${currentPhone}`);
       if (storedPassword && password === storedPassword) {
+        localStorage.setItem("member_session_phone", currentPhone);
         setMessage("Mock sign-in successful. Redirecting...");
-        setTimeout(() => navigate("/dashboard/isMember"), 800);
+        setTimeout(() => navigate("/dashboard/profile"), 800);
       } else {
         setError("Incorrect password.");
       }
@@ -118,19 +120,22 @@ export default function MemberLogin() {
           </form>
         ) : (
           <form onSubmit={handlePasswordSubmit} className="mt-8 space-y-4">
-            <label className="block text-sm font-semibold text-[#334155]">Phone</label>
+             <div className="flex items-center gap-2">
+              <label className="block text-sm font-semibold text-[#334155]">Phone</label>
+              <span className="text-xs text-[#64748B]">({currentPhone})</span>
+            </div>
             <input
-              value={phone}
+              value={currentPhone}
               readOnly
-              className="w-full rounded-2xl border border-[#CBD5E1] bg-[#E2E8F0] px-4 py-3 text-base text-[#475569]"
+              className="w-full rounded-2xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-base text-[#04252D] font-medium"
             />
 
-            <label className="block text-sm font-semibold text-[#334155]">Password</label>
+             <label className="block text-sm font-semibold text-[#334155]">Password</label>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Create password"
+              placeholder="Enter your password"
               className="w-full rounded-2xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-base outline-none transition focus:border-[#FFDD00]"
             />
 
