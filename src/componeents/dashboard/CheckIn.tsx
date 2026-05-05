@@ -43,7 +43,7 @@ export default function CheckIn({
         localStorage.setItem("user_id", user_details.id);
         localStorage.setItem("status", "member");
         if (user_details.is_member) {
-          navigate("/dashboard/isMember");
+          navigate("/dashboard/profile");
         } else {
           localStorage.setItem("status", "non_member");
           navigate("/dashboard/enterDetails", { replace: true });

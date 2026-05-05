@@ -11,7 +11,8 @@ const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
   const [login_out, set_login_out] = useState(false);
   const admin_name = localStorage.getItem("admin_name");
   const { logout } = useAuth();
-  const isActive = (path: string) => location.pathname == path;
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   // Animation variants for mobile
   const sidebarVariants = {
@@ -40,6 +41,19 @@ const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
       </div>
 
       <div className="flex-1 py-6 overflow-y-auto">
+        <Link to="/dashboard/profile" onClick={() => setIsMobileMenuOpen(false)}>
+          <motion.div
+            className={`flex items-center px-6 py-3 ${
+              isActive("/dashboard/profile") ? "font-bold bg-gray-100" : ""
+            }`}
+            whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <CircleUser className="mr-4" size={20} />
+            <span>Profile</span>
+          </motion.div>
+        </Link>
+
         <Link to="/check-ins" onClick={() => setIsMobileMenuOpen(false)}>
           <motion.div
             className={`flex items-center px-6 py-3 ${
@@ -137,19 +151,17 @@ const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
           </motion.div>
         </Link>
 
-        <div className="relative p-6 md:mt-32 mt-48">
+         <div className="relative p-6 mt-auto">
           <button
-            className={`w-[85px] h-[35px] text-center p-[10px] mb-[20px] mt-[39px] lg:w-[176px] lg:h-[60px] bg-[#FFDD00] lg:mt-[29px] cursor-pointer ${
-              login_out && "opacity-50 cursor-not-allowed"
-            }`}
+            className={`w-full h-[44px] text-center px-4 py-3 mb-2 bg-[#FFDD00] hover:bg-[#FFD000] transition-colors duration-200 rounded-lg font-semibold text-[#04252D] text-sm lg:text-base flex items-center justify-center gap-2 ${login_out && "opacity-50 cursor-not-allowed"}`}
             onClick={() => {
               set_login_out(true);
               setTimeout(logout, 2000);
             }}
           >
+            <FaArrowLeft size={16} />
             Log Out
           </button>
-          <FaArrowLeft className="absolute left-2 mr-4" size={16} />
         </div>
       </div>
     </>
