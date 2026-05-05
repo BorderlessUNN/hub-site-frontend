@@ -57,7 +57,7 @@ export default async function apifetch<T>(
     const refresh_token = localStorage.getItem("refresh_token");
     if (!refresh_token || isTokenExpired(refresh_token)) {
       localStorage.clear();
-      window.location.href = "/login";
+      window.location.href = "/admin/login";
     }
     const newToken = await getrefreshtoken(`${refresh_token}`);
     if (newToken) {
@@ -66,7 +66,7 @@ export default async function apifetch<T>(
     } else {
       //  Refresh also failed → force logout
       localStorage.clear();
-      window.location.replace("/login");
+      window.location.replace("/admin/login");
     }
   }
 

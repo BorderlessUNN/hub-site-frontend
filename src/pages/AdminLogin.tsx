@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { useAuth } from "../context/authContext";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
@@ -10,10 +9,8 @@ export default function AdminLogin() {
   const [showpassword, setshowpassword] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setloading] = useState(false);
-
   const [errorMessage, setErroMessage] = useState("");
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   function inputValidator() {
@@ -29,7 +26,6 @@ export default function AdminLogin() {
     try {
       await login({ email, password });
       navigate("check-ins");
-      console.log("navigating");
     } catch (error: any) {
       setErroMessage(error.message);
     } finally {
@@ -37,70 +33,83 @@ export default function AdminLogin() {
     }
   };
   return (
-    <>
-      <div className="flex flex-col mx-auto  w-full h-screen overflow-auto ">
-        <img
-          className=" w-[82px] h-[94px] mx-auto mt-[100px] lg:w-[125px] lg:h-[143.88px] lg:mt-[2px]"
-          src="/avatar.jpg"
-        ></img>
-        <img
-          className=" w-[142px] h-[31px] lg:w-[262.21px] lg:h-[57px] mx-auto"
-          src="/logo.png"
-        ></img>
-        <h1 className="font-bold mb-[36px] mt-[10px] lg:mt-[16px] text-center">
-          {" "}
-          Tech club unn
-        </h1>
-        <p className="font-bold text-center">Admin Login</p>
-        <form onSubmit={logIn} className="mx-auto flex flex-col items-center">
+    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-md rounded-[28px] border border-[#FFDD00] bg-white p-6 shadow-lg sm:p-10">
+        <div className="text-center">
+          <img
+            src="/avatar.jpg"
+            alt="Avatar"
+            className="mx-auto mb-6 h-[94px] w-[82px] lg:h-[144px] lg:w-[125px]"
+          />
+          <img
+            src="/logo.png"
+            alt="Borderless logo"
+            className="mx-auto mb-6 h-12 w-auto object-contain"
+          />
+          <h1 className="text-2xl font-bold text-[#04252D]">Admin Login</h1>
+          <p className="mt-2 text-sm text-[#64748B]">
+            Enter your admin credentials to access the dashboard.
+          </p>
+        </div>
+
+        <form onSubmit={logIn} className="mt-8 space-y-4">
+          <label className="block text-sm font-semibold text-[#334155]">Email</label>
           <input
             id="email"
-            placeholder="Email"
+            placeholder="Enter your email"
             autoComplete="off"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            className="placeholder:opacity-50 placeholder:text-sm placeholder:italic mt-[20px] p-[10px] w-[283px] h-[32px] lg:w-[541px] lg:h-[62px] lg:mt-[16px] border-1 border-[#FFDD00] border-solid rounded"
+            className="w-full rounded-2xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-base outline-none transition focus:border-[#FFDD00]"
             type="text"
-          ></input>
-          <br />
-          <div className="relative w-full">
-            {" "}
+          />
+
+          <label className="block text-sm font-semibold text-[#334155]">Password</label>
+          <div className="relative">
             <input
               id="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              className="placeholder:opacity-50 placeholder:text-sm placeholder:italic mt-[20px] p-[10px] w-[283px] h-[32px] lg:w-[541px] lg:h-[62px] lg:mt-[16px] border-1 border-[#FFDD00] border-solid rounded"
+              className="w-full rounded-2xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-3 text-base outline-none transition focus:border-[#FFDD00]"
               type={`${showpassword ? "text" : "password"}`}
-            ></input>
+            />
             <button
               type="button"
               onClick={() => setshowpassword(!showpassword)}
-              className="absolute right-[8px] top-[25px] lg:right-[21px] lg:top-[35px]"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#475569]"
             >
               {showpassword ? (
-                <Eye className="w-[14px] h-[14px] lg:w-[20px] lg:h-[20px]" />
+                <Eye size={20} />
               ) : (
-                <EyeOff className="w-[14px] h-[14px] lg:w-[20px] lg:h-[20px]" />
+                <EyeOff size={20} />
               )}
             </button>
           </div>
 
-          <br />
-          <p className="text-red-500 mb-[10px] text-[20px]">{errorMessage}</p>
+          {errorMessage ? (
+            <p className="text-sm text-red-500">{errorMessage}</p>
+          ) : null}
+
           <motion.button
-            whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
-            whileHover={{ backgroundColor: "#F4C400" }}
-            transition={{ type: "spring", stiffness: "300" }}
-            className={` ${
-              loading && "opacity-50 cursor-not-allowed"
-            }w-[85px] h-[35px] text-center p-[10px] mb-[20px] mt-[39px] lg:w-[176px] lg:h-[60px] bg-[#FFDD00] lg:mt-[29px]`}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            className={`${loading && "opacity-50 cursor-not-allowed"} w-full rounded-lg bg-[#04252D] px-5 py-3 text-sm font-semibold text-white transition`}
           >
-            Log in
+            {loading ? "Logging in..." : "Log in"}
           </motion.button>
         </form>
+
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="mt-8 text-sm text-[#64748B] underline"
+        >
+          Back to home
+        </button>
       </div>
-    </>
+    </div>
   );
 }
