@@ -25,7 +25,7 @@ export default function LandingPage() {
               <strong className="font-bold">BTC UNN</strong> is a student-based Web3 community focused on fostering growth, training tech enthusiasts, and bringing them on-chain.
             </h1>
             <p className="max-w-2xl text-sm leading-6 text-[#475569] sm:text-base">
-              This is the official landing page for the HUB, welcoming both members and non-members.
+              Welcome members and non-members.
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 mt-6">
@@ -46,10 +46,6 @@ export default function LandingPage() {
                 Book Time
               </motion.button>
             </div>
-
-            <p className="text-sm text-[#64748B] text-center">
-              Admin users should use <Link to="/admin/login" className="font-semibold underline">/admin/login</Link>.
-            </p>
           </div>
 
            <div className="flex justify-center lg:justify-end">
