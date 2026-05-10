@@ -111,20 +111,8 @@ export default function App() {
                 />
               }
             />
-            <Route
-              path="profile"
-              element={<Member email={email} email_handler={email_handler} />}
-            />
-            <Route
-              path="profile/update"
-              element={
-                <Member
-                  email={email}
-                  email_handler={email_handler}
-                  forceEditMode
-                />
-              }
-            />
+            <Route path="profile" element={<Member />} />
+            <Route path="profile/update" element={<Member forceEditMode />} />
             <Route path="isMember" element={<Navigate to="profile" replace />} />
             <Route path="seats" element={<Seats />} />
             <Route

@@ -54,15 +54,7 @@ const saveProfile = (profile: MemberProfile) => {
   localStorage.setItem(profileKey(profile.phone), JSON.stringify(profile));
 };
 
-export default function Member({
-  email,
-  email_handler,
-  forceEditMode = false,
-}: {
-  email: string;
-  email_handler: (email: string) => void;
-  forceEditMode?: boolean;
-}) {
+export default function Member({ forceEditMode = false }: { forceEditMode?: boolean }) {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<MemberProfile | null>(null);
   const [currentPhone, setCurrentPhone] = useState<string | null>(null);
