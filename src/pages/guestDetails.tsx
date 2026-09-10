@@ -139,7 +139,7 @@ export default function GuestDetails({
               <motion.button
                 whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
                 whileHover={{ backgroundColor: "#F4C400" }}
-                transition={{ type: "spring", stiffness: "300" }}
+                transition={{ type: "spring", stiffness: 300 }}
                 className={` ${
                   loading && "opacity-50 cursor-not-allowed"
                 }text-[15px] font-bold h-[37px] w-[77px] mb-[35px] lg:text-[25px] lg:h-[57px] lg:w-[178px] lg:mb-[87px] bg-[#FFDD00] border-1 border-[#FFDD00] border-solid rounded ${

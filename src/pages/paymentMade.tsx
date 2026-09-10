@@ -45,7 +45,7 @@ export default function PaymentMade({
             onClick={book_seat}
             whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
             whileHover={{ backgroundColor: "#F4C400" }}
-            transition={{ type: "spring", stiffness: "300" }}
+            transition={{ type: "spring", stiffness: 300 }}
             className="bg-[#FFDD00] text-[15px] cursor-pointer font-bold items-center w-[123px] h-[45px] mb-[33px] lg:w-[293px] lg:h-[59px] lg:text-[25px]  lg:mx-auto lg:mb-[48px]"
           >
             {" "}

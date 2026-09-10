@@ -3,11 +3,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaUserPlus, FaArrowLeft, FaBars, FaTimes } from "react-icons/fa";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
-import { ChartNoAxesCombined, CalendarCheck2, CircleUser } from "lucide-react";
+import {
+  ChartNoAxesCombined,
+  CalendarCheck2,
+  CircleUser,
+  Users,
+  Upload,
+  CalendarX2,
+  Wallet,
+} from "lucide-react";
 
 const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isSuperAdmin =
+    (localStorage.getItem("admin_role") as "super" | "staff" | null) === "super";
   const [login_out, set_login_out] = useState(false);
   const admin_name = localStorage.getItem("admin_name");
   const { logout } = useAuth();
@@ -93,6 +103,32 @@ const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
           </motion.div>
         </Link>
 
+        <Link to="members" onClick={() => setIsMobileMenuOpen(false)}>
+          <motion.div
+            className={`flex items-center px-6 py-3 ${
+              isActive("members") ? "font-bold bg-gray-100" : ""
+            }`}
+            whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Users className="mr-4" size={20} />
+            <span>Members</span>
+          </motion.div>
+        </Link>
+
+        <Link to="daily-checkins" onClick={() => setIsMobileMenuOpen(false)}>
+          <motion.div
+            className={`flex items-center px-6 py-3 ${
+              isActive("daily-checkins") ? "font-bold bg-gray-100" : ""
+            }`}
+            whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <CalendarCheck2 className="mr-4" size={20} />
+            <span>Today's Check-ins</span>
+          </motion.div>
+        </Link>
+
         <Link to="schedule" onClick={() => setIsMobileMenuOpen(false)}>
           <motion.div
             className={`flex items-center px-6 py-3 ${
@@ -105,6 +141,62 @@ const Sidebar = ({ checked_in_email }: { checked_in_email: string }) => {
             <span>Schedule</span>
           </motion.div>
         </Link>
+
+        {isSuperAdmin && (
+          <>
+            <Link to="admins" onClick={() => setIsMobileMenuOpen(false)}>
+              <motion.div
+                className={`flex items-center px-6 py-3 ${
+                  isActive("admins") ? "font-bold bg-gray-100" : ""
+                }`}
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Users className="mr-4" size={20} />
+                <span>Admins</span>
+              </motion.div>
+            </Link>
+
+            <Link to="import" onClick={() => setIsMobileMenuOpen(false)}>
+              <motion.div
+                className={`flex items-center px-6 py-3 ${
+                  isActive("import") ? "font-bold bg-gray-100" : ""
+                }`}
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Upload className="mr-4" size={20} />
+                <span>Import Members</span>
+              </motion.div>
+            </Link>
+
+            <Link to="closure-dates" onClick={() => setIsMobileMenuOpen(false)}>
+              <motion.div
+                className={`flex items-center px-6 py-3 ${
+                  isActive("closure-dates") ? "font-bold bg-gray-100" : ""
+                }`}
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <CalendarX2 className="mr-4" size={20} />
+                <span>Closure Days</span>
+              </motion.div>
+            </Link>
+
+            <Link to="revenue" onClick={() => setIsMobileMenuOpen(false)}>
+              <motion.div
+                className={`flex items-center px-6 py-3 ${
+                  isActive("revenue") ? "font-bold bg-gray-100" : ""
+                }`}
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Wallet className="mr-4" size={20} />
+                <span>Revenue</span>
+              </motion.div>
+            </Link>
+          </>
+        )}
 
         <Link
           to={checked_in_email == "" ? "#" : "seats"}

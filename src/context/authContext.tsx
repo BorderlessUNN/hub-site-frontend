@@ -1,10 +1,12 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import loginAdmin from "../../services/apis/login";
+import { getMe } from "../../services/apis/auth";
 
 type User = {
   name: string;
   email: string;
   id: string;
+  admin_role?: "super" | "staff" | null;
 };
 type Logindetails = {
   email: string;
@@ -37,6 +39,17 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
     localStorage.setItem("access_token", user.tokens.access_token);
     localStorage.setItem("refresh_token", user.tokens.refresh_token);
 
+    // Resolve the admin's tier (super/staff) so the dashboard can gate
+    // Super-Admin-only screens.
+    try {
+      const me = await getMe();
+      const adminRole = me.data.admin_role ?? null;
+      if (adminRole) localStorage.setItem("admin_role", adminRole);
+      userData.admin_role = adminRole;
+    } catch {
+      // Non-fatal: fall back to Staff-level access if /me is unavailable.
+    }
+
     setUser(userData);
     setIsLoggedIn(true);
     return res;
@@ -54,10 +67,14 @@ export function AuthProvider({ children }: { children?: React.ReactNode }) {
     const name = localStorage.getItem("admin_name");
     const email = localStorage.getItem("admin_email");
     const id = localStorage.getItem("admin_id");
+    const admin_role = localStorage.getItem("admin_role") as
+      | "super"
+      | "staff"
+      | null;
 
     if (token && refresh && name && email && id) {
       setIsLoggedIn(true);
-      setUser({ name, email, id });
+      setUser({ name, email, id, admin_role });
     } else {
       logout();
     }

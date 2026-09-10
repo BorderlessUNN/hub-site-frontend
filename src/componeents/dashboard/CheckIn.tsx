@@ -78,7 +78,7 @@ export default function CheckIn({
             <motion.button
               whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
               whileHover={{ backgroundColor: "#F4C400" }}
-              transition={{ type: "spring", stiffness: "300" }}
+              transition={{ type: "spring", stiffness: 300 }}
               className={`  ${
                 loading && "opacity-50 cursor-not-allowed"
               }h-[21px] w-fit  text-center p-[10px] mr-2 lg:h-[47px] bg-[#FFDD00] border-1 border-[#FFDD00] border-solid rounded ${

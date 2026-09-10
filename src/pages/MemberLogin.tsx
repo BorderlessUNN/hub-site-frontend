@@ -2,6 +2,23 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { mockMemberDetails } from "../mock/auth";
+import {
+  checkMemberHasPassword,
+  setMemberPassword,
+  memberLogin,
+} from "../../services/apis/auth";
+
+function storeMemberSession(
+  phone: string,
+  user: { id: string; name: string; email: string; phone_number: string },
+  tokens: { access_token: string; refresh_token: string }
+) {
+  localStorage.setItem("access_token", tokens.access_token);
+  localStorage.setItem("refresh_token", tokens.refresh_token);
+  localStorage.setItem("member_session_phone", phone);
+  localStorage.setItem("member_id", user.id);
+  localStorage.setItem("role", "member");
+}
 
 export default function MemberLogin() {
   const [phone, setPhone] = useState("");
@@ -14,7 +31,7 @@ export default function MemberLogin() {
   const [currentPhone, setCurrentPhone] = useState("");
   const navigate = useNavigate();
 
-  const handlePhoneSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePhoneSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setMessage("");
@@ -26,24 +43,32 @@ export default function MemberLogin() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      const hasStoredPassword = localStorage.getItem(`member_password_${normalized}`);
-      const firstTime = !hasStoredPassword;
-
-      setFlow(firstTime ? "firstTime" : "returning");
+    try {
+      const res = await checkMemberHasPassword({ identifier: normalized });
+      const hasPassword = res.data.has_password;
+      setFlow(hasPassword ? "returning" : "firstTime");
       setMessage(
-        firstTime
-          ? "First-time login detected. Create your password."
-          : "Welcome back. Enter your password to continue."
+        hasPassword
+          ? "Welcome back. Enter your password to continue."
+          : "First-time login detected. Create your password."
       );
       setCurrentPhone(normalized);
       setPassword("");
       setConfirmPassword("");
-    }, 500);
+    } catch (err: unknown) {
+      const body = (err as { body?: { not_a_member?: boolean } })?.body;
+      if (body?.not_a_member) {
+        setError("You are not a community member. Redirecting you to book a session...");
+        setTimeout(() => navigate("/book-time"), 1500);
+      } else {
+        setError((err as Error).message || "Something went wrong. Try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handlePasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setMessage("");
@@ -53,14 +78,26 @@ export default function MemberLogin() {
         setError("Enter and confirm your password.");
         return;
       }
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters.");
+        return;
+      }
       if (password !== confirmPassword) {
         setError("Passwords do not match.");
         return;
       }
-      localStorage.setItem(`member_password_${currentPhone}`, password);
-      localStorage.setItem("member_session_phone", currentPhone);
-      setMessage("Password created successfully. Redirecting...");
-      setTimeout(() => navigate("/dashboard/profile/update"), 800);
+      setLoading(true);
+      try {
+        await setMemberPassword({ identifier: currentPhone, password });
+        const login = await memberLogin({ identifier: currentPhone, password });
+        storeMemberSession(currentPhone, login.data.user, login.data.tokens);
+        setMessage("Password created successfully. Redirecting...");
+        setTimeout(() => navigate("/dashboard/profile"), 800);
+      } catch (err: unknown) {
+        setError((err as Error).message || "Could not set your password.");
+      } finally {
+        setLoading(false);
+      }
       return;
     }
 
@@ -69,13 +106,16 @@ export default function MemberLogin() {
         setError("Enter your password.");
         return;
       }
-      const storedPassword = localStorage.getItem(`member_password_${currentPhone}`);
-      if (storedPassword && password === storedPassword) {
-        localStorage.setItem("member_session_phone", currentPhone);
-        setMessage("Mock sign-in successful. Redirecting...");
+      setLoading(true);
+      try {
+        const login = await memberLogin({ identifier: currentPhone, password });
+        storeMemberSession(currentPhone, login.data.user, login.data.tokens);
+        setMessage("Sign-in successful. Redirecting...");
         setTimeout(() => navigate("/dashboard/profile"), 800);
-      } else {
-        setError("Incorrect password.");
+      } catch (err: unknown) {
+        setError((err as Error).message || "Incorrect password.");
+      } finally {
+        setLoading(false);
       }
       return;
     }
@@ -157,8 +197,9 @@ export default function MemberLogin() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               className="w-full rounded-lg bg-[#04252D] px-5 py-3 text-sm font-semibold text-white transition"
+              disabled={loading}
             >
-              {flow === "firstTime" ? "Create Password" : "Sign In"}
+              {loading ? "Please wait..." : flow === "firstTime" ? "Create Password" : "Sign In"}
             </motion.button>
           </form>
         )}

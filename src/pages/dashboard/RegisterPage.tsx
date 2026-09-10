@@ -67,7 +67,7 @@ const Register = () => {
       <motion.button
         whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
         whileHover={{ backgroundColor: "#F4C400" }}
-        transition={{ type: "spring", stiffness: "300" }}
+        transition={{ type: "spring", stiffness: 300 }}
         onClick={() => set_display_successful(false)}
         className=" w-[94px] h-[37px] mb-[29px] lg:mb-[52px] lg:w-[184px] lg:h-[60px] lg:text-[25px] bg-[#FFDD00] font-bold cursor-pointer"
       >
@@ -145,7 +145,7 @@ const Register = () => {
             <motion.button
               whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
               whileHover={{ backgroundColor: "#F4C400" }}
-              transition={{ type: "spring", stiffness: "300" }}
+              transition={{ type: "spring", stiffness: 300 }}
               className={` ${
                 loading && "opacity-50 cursor-not-allowed"
               } text-[15px] font-bold h-[37px] w-[77px] mb-[35px] lg:text-[25px] lg:h-[57px] lg:w-[178px] lg:mb-[87px] bg-[#FFDD00] border-1 border-[#FFDD00] border-solid rounded cursor-pointer`}

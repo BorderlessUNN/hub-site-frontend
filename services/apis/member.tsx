@@ -46,9 +46,10 @@ export function createMember(payload: {
   date_of_birth: string;
   tech_stack: string;
 }) {
+  const { whatsapp_number, ...rest } = payload;
   return apifetch<capture>("api/v1/member/create/", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...rest, phone_number: whatsapp_number }),
   });
 }
 
@@ -67,9 +68,10 @@ export function captureNonMember(payload: {
   tech_stack: string;
   date_of_birth: string;
 }) {
+  const { whatsapp_number, ...rest } = payload;
   return apifetch<capture>("api/v1/non-member/data/capture/", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...rest, phone_number: whatsapp_number }),
   });
 }
 

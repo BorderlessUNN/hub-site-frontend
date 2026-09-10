@@ -13,7 +13,7 @@ function isTokenExpired(token: string): boolean {
 }
 
 async function getrefreshtoken(token: string): Promise<string | null> {
-  const res = await fetch(`${base_Url}api/v1/admin/token/refresh/`, {
+  const res = await fetch(`${base_Url}api/v1/auth/token/refresh/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -72,7 +72,10 @@ export default async function apifetch<T>(
 
   if (!res.ok) {
     const errorBody = await res.json().catch(() => null);
-    throw new Error(errorBody?.msg || "network connectivity issues");
+    const error = new Error(errorBody?.msg || "network connectivity issues");
+    // Preserve the parsed body so callers can read flags like not_a_member.
+    (error as Error & { body?: unknown }).body = errorBody;
+    throw error;
   }
   return res.json();
 }

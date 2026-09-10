@@ -7,6 +7,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { bookSeat } from "./../../services/apis/seat";
 import { seatState } from "./../../services/apis/seat";
 import { checkOutSeat } from "./../../services/apis/seat";
+import { createCheckIn } from "./../../services/apis/checkin";
 
 type BookSeat = {
   seat_id: string;
@@ -71,8 +72,17 @@ export default function Seats() {
   const proceed = async () => {
     const identity = localStorage.getItem("status");
     if (!booked_seat || !current_seat) return;
+    // Record attendance against the active subscription for members here;
+    // non-members are checked in after their payment is recorded.
+    if (identity == "member" && user_id) {
+      try {
+        await createCheckIn({ user_id });
+      } catch {
+        // Non-fatal: seat booking already succeeded.
+      }
+      navigate("/dashboard/check-ins");
+    }
     if (identity == "non_member") navigate("/dashboard/nonMember");
-    if (identity == "member") navigate("/dashboard/check-ins");
   };
   function seatRow(seatNum1: Seats, seatNum2: Seats) {
     return (
@@ -176,7 +186,7 @@ export default function Seats() {
           disabled={!user_id || current_seat?.is_taken}
           whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
           whileHover={{ backgroundColor: "#F4C400" }}
-          transition={{ type: "spring", stiffness: "300" }}
+          transition={{ type: "spring", stiffness: 300 }}
           className={`bg-[#FFDD00] text-[15px] font-bold items-center w-[100px] h-[35px] mb-[33px] lg:w-[250px] lg:h-[59px] lg:text-[25px]  lg:mx-auto lg:mb-[48px] ${
             current_seat?.is_taken
               ? "cursor-not-allowed opacity-50"
@@ -203,7 +213,7 @@ export default function Seats() {
           disabled={!current_seat?.seat_number || !current_seat?.is_taken}
           whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
           whileHover={{ backgroundColor: "#F4C400" }}
-          transition={{ type: "spring", stiffness: "300" }}
+          transition={{ type: "spring", stiffness: 300 }}
           className={`bg-[#FFDD00] text-[15px] font-bold items-center w-[100px] h-[35px] mb-[33px]  lg:w-[250px] lg:h-[59px] lg:text-[25px]  lg:mx-auto lg:mb-[48px] ${
             !current_seat?.is_taken
               ? "cursor-not-allowed opacity-50"
@@ -288,7 +298,7 @@ export default function Seats() {
             <motion.button
               whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
               whileHover={{ backgroundColor: "#F4C400" }}
-              transition={{ type: "spring", stiffness: "300" }}
+              transition={{ type: "spring", stiffness: 300 }}
               onClick={proceed}
               className={`w-[111px] h-[35px] mx-auto mb-[18px] lg:w-[182px] lg:h-[59px] cursor-pointer bg-[#FFDD00] border-1 border-[#FFDD00] border-solid rounded lg:mx-auto lg:mb-[50px] ${
                 !booked_seat && "cursor-not-allowed opacity-50"

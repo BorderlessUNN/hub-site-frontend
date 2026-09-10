@@ -25,7 +25,7 @@ export default function AdminLogin() {
     setloading(true);
     try {
       await login({ email, password });
-      navigate("check-ins");
+      navigate("/dashboard/check-ins");
     } catch (error: any) {
       setErroMessage(error.message);
     } finally {

@@ -29,7 +29,7 @@ export default function SaveDetails({
           <motion.button
             whileTap={{ scale: 0.95, backgroundColor: "#F4C400" }}
             whileHover={{ backgroundColor: "#F4C400" }}
-            transition={{ type: "spring", stiffness: "300" }}
+            transition={{ type: "spring", stiffness: 300 }}
             onClick={proceed}
             className=" w-[94px] h-[37px] mb-[29px] lg:mb-[52px] lg:w-[184px] lg:h-[60px] lg:text-[25px] bg-[#FFDD00] font-bold cursor-pointer"
           >

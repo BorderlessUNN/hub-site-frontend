@@ -32,6 +32,18 @@ import PaymentMade from "./pages/paymentMade";
 import SaveDetails from "./pages/detailsSaved";
 import GuestDetails from "./pages/guestDetails";
 import DashboardLayout from "./componeents/dashboard/dashBoardLayout";
+import AdminManagement from "./pages/dashboard/AdminManagement";
+import MemberImport from "./pages/dashboard/MemberImport";
+import ClosureDates from "./pages/dashboard/ClosureDates";
+import RevenueReport from "./pages/dashboard/RevenueReport";
+import Members from "./pages/dashboard/Members";
+import DailyCheckins from "./pages/dashboard/DailyCheckins";
+
+// Super-Admin-only route guard: falls back to check-ins for Staff admins.
+const SuperAdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const role = localStorage.getItem("admin_role");
+  return role === "super" ? <>{children}</> : <Navigate to="check-ins" replace />;
+};
 
 export type availablePlan = {
   expires_at: Date;
@@ -73,6 +85,7 @@ export default function App() {
             isLoggedIn ? <Navigate to="/dashboard" replace /> : <BookTime />
           }
         />
+        <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/nonMemberLogin"
@@ -100,6 +113,41 @@ export default function App() {
             <Route path="statistics" element={<Statistics />} />
             <Route path="register" element={<Register />} />
             <Route path="schedule" element={<Schedule />} />
+            <Route path="members" element={<Members />} />
+            <Route path="daily-checkins" element={<DailyCheckins />} />
+
+            <Route
+              path="admins"
+              element={
+                <SuperAdminRoute>
+                  <AdminManagement />
+                </SuperAdminRoute>
+              }
+            />
+            <Route
+              path="import"
+              element={
+                <SuperAdminRoute>
+                  <MemberImport />
+                </SuperAdminRoute>
+              }
+            />
+            <Route
+              path="closure-dates"
+              element={
+                <SuperAdminRoute>
+                  <ClosureDates />
+                </SuperAdminRoute>
+              }
+            />
+            <Route
+              path="revenue"
+              element={
+                <SuperAdminRoute>
+                  <RevenueReport />
+                </SuperAdminRoute>
+              }
+            />
 
             <Route
               path="nonMember"

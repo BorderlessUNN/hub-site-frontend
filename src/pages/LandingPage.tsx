@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -46,6 +46,13 @@ export default function LandingPage() {
                 Book Time
               </motion.button>
             </div>
+
+            <button
+              onClick={() => navigate("/admin/login")}
+              className="mt-2 w-fit text-sm font-semibold text-[#64748B] underline underline-offset-4 transition hover:text-[#04252D]"
+            >
+              Admin Portal
+            </button>
           </div>
 
            <div className="flex justify-center lg:justify-end">
